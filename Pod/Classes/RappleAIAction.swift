@@ -28,6 +28,7 @@
  ** */
 
 import Foundation
+import QuartzCore
 
 /** calling actions */
 extension RappleActivityIndicatorView {
@@ -40,6 +41,7 @@ extension RappleActivityIndicatorView {
     
     /** create & start */
     @objc class func startPrivateAnimating() {
+        sharedInstance.keyWindow.layer.removeAllAnimations()
         
         sharedInstance.keyWindow.endEditing(true)
         sharedInstance.keyWindow.isUserInteractionEnabled = false
@@ -136,15 +138,17 @@ extension RappleActivityIndicatorView {
                 sharedInstance.keyWindow.tintAdjustmentMode = .automatic
                 sharedInstance.keyWindow.tintColorDidChange()
             }, completion: { (finished) -> Void in
-                sharedInstance.clearUIs()
-                sharedInstance.backgroundView?.removeFromSuperview()
-                sharedInstance.backgroundView = nil
-                sharedInstance.keyWindow.isUserInteractionEnabled = true
-                
-                if sharedInstance.attributes[RappleIndicatorStyleKey] as? String == RappleStyleText {
-                    sharedInstance.dotCount = 0
-                    sharedInstance.textStyleVisible = false
-                    sharedInstance.activityLable?.removeFromSuperview() // only text value is available
+                if finished {
+                    sharedInstance.clearUIs()
+                    sharedInstance.backgroundView?.removeFromSuperview()
+                    sharedInstance.backgroundView = nil
+                    sharedInstance.keyWindow.isUserInteractionEnabled = true
+                    
+                    if sharedInstance.attributes[RappleIndicatorStyleKey] as? String == RappleStyleText {
+                        sharedInstance.dotCount = 0
+                        sharedInstance.textStyleVisible = false
+                        sharedInstance.activityLable?.removeFromSuperview() // only text value is available
+                    }
                 }
             })
         }
